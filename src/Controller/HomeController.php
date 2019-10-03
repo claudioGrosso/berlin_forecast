@@ -45,30 +45,53 @@ class HomeController extends AbstractController
         $forecast->setText($data["Headline"]["Text"]);
         $forecast->setCityId($city);
 
-        $dailyForecast = $data["DailyForecasts"];
-
-        foreach($dailyForecast as $daily){
-
-            var_dump($daily);
-            
-            $day = new DailyForecast();
-            $day->setDate($day["Date"]);
-            $day->setMin($day["Temperature"]["Minimum"]);
-            $day->setMax($day["Temperature"]["Maximum"]);
-            $day->setDay($day["Day"]);
-            $day->setNight($day["Night"]);
-
-
-        } 
-
-
-
-
-
-        $responseJson = JsonResponse::fromJsonString('foo');
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($city);
+        $entityManager->persist($forecast);
         
-        return $responseJson;
+        
+        $dailyForecast = $data["DailyForecasts"];
+        $weathers = array();
+        
+        foreach($dailyForecast as $daily){
+                        
+            $day = new DailyForecast();
+            $day->setDate($daily["Date"]);
+            $day->setMin($daily["Temperature"]["Minimum"]["Value"]);
+            $day->setMax($daily["Temperature"]["Maximum"]["Value"]);
+            $day->setDay($daily["Day"]["IconPhrase"]);
+            $day->setNight($daily["Night"]["IconPhrase"]);
+            $day->setForecastId($forecast);
+            
+            $entityManager->persist($day);
+            
+            $weather = array(
+                'date' => $day->getDate(),
+                'min' => $day->getMin(),
+                'max' => $day->getMax(),
+                'day' => $day->getDay(),
+                'night' => $day->getNight(),
+            );
 
-        //return $this->render('home/index.html.twig', ['controller_name' => 'HomeController',]);
+            array_push($weathers, $weather);
+            
+        }         
+        
+        
+        $entityManager->flush();
+        
+        return $this->render('home/show.html.twig', ['weathers' => $weathers]);
+                
+    }
+
+    /**
+     * @Route("/show", name="show")
+     */
+    public function show(){
+
+
+
+        return $this->render('home/show.html.twig');
+
     }
 }
