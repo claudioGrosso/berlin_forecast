@@ -19,6 +19,11 @@ class Weather
     /**
      * @ORM\Column(type="string", length=255)
      */
+    private $light;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $phrase;
 
     /**
@@ -29,7 +34,7 @@ class Weather
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $precipitationType;
+    private $type;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -37,7 +42,7 @@ class Weather
     private $intensity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\DailyForecast", inversedBy="dayWeather")
+     * @ORM\ManyToOne(targetEntity="App\Entity\DailyForecast", inversedBy="weather")
      * @ORM\JoinColumn(nullable=false)
      */
     private $dailyForecast;
@@ -45,6 +50,18 @@ class Weather
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getLight(): ?string
+    {
+        return $this->light;
+    }
+
+    public function setLight(string $light): self
+    {
+        $this->light = $light;
+
+        return $this;
     }
 
     public function getPhrase(): ?string
@@ -71,14 +88,14 @@ class Weather
         return $this;
     }
 
-    public function getPrecipitationType(): ?string
+    public function getType(): ?string
     {
-        return $this->precipitationType;
+        return $this->type;
     }
 
-    public function setPrecipitationType(?string $precipitationType): self
+    public function setType(string $type): self
     {
-        $this->precipitationType = $precipitationType;
+        $this->type = $type;
 
         return $this;
     }
@@ -88,7 +105,7 @@ class Weather
         return $this->intensity;
     }
 
-    public function setIntensity(?string $intensity): self
+    public function setIntensity(string $intensity): self
     {
         $this->intensity = $intensity;
 

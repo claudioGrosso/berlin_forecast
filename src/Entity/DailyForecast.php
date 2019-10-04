@@ -26,12 +26,12 @@ class DailyForecast
     /**
      * @ORM\Column(type="integer")
      */
-    private $minimum;
+    private $min;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $maximum;
+    private $max;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Forecast", inversedBy="dailyForecasts")
@@ -40,13 +40,13 @@ class DailyForecast
     private $forecast;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Weather", mappedBy="dailyForecast", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Weather", mappedBy="dailyForecast", orphanRemoval=false)
      */
-    private $dayWeather;
+    private $weather;
 
     public function __construct()
     {
-        $this->dayWeather = new ArrayCollection();
+        $this->weather = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -66,26 +66,26 @@ class DailyForecast
         return $this;
     }
 
-    public function getMinimum(): ?int
+    public function getMin(): ?int
     {
-        return $this->minimum;
+        return $this->min;
     }
 
-    public function setMinimum(int $minimum): self
+    public function setMin(int $min): self
     {
-        $this->minimum = $minimum;
+        $this->min = $min;
 
         return $this;
     }
 
-    public function getMaximum(): ?int
+    public function getMax(): ?int
     {
-        return $this->maximum;
+        return $this->max;
     }
 
-    public function setMaximum(int $maximum): self
+    public function setMax(int $max): self
     {
-        $this->maximum = $maximum;
+        $this->max = $max;
 
         return $this;
     }
@@ -105,28 +105,28 @@ class DailyForecast
     /**
      * @return Collection|Weather[]
      */
-    public function getDayWeather(): Collection
+    public function getWeather(): Collection
     {
-        return $this->dayWeather;
+        return $this->weather;
     }
 
-    public function addDayWeather(Weather $dayWeather): self
+    public function addWeather(Weather $weather): self
     {
-        if (!$this->dayWeather->contains($dayWeather)) {
-            $this->dayWeather[] = $dayWeather;
-            $dayWeather->setDailyForecast($this);
+        if (!$this->weather->contains($weather)) {
+            $this->weather[] = $weather;
+            $weather->setDailyForecast($this);
         }
 
         return $this;
     }
 
-    public function removeDayWeather(Weather $dayWeather): self
+    public function removeWeather(Weather $weather): self
     {
-        if ($this->dayWeather->contains($dayWeather)) {
-            $this->dayWeather->removeElement($dayWeather);
+        if ($this->weather->contains($weather)) {
+            $this->weather->removeElement($weather);
             // set the owning side to null (unless already changed)
-            if ($dayWeather->getDailyForecast() === $this) {
-                $dayWeather->setDailyForecast(null);
+            if ($weather->getDailyForecast() === $this) {
+                $weather->setDailyForecast(null);
             }
         }
 
