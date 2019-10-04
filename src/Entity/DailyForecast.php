@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,109 +19,116 @@ class DailyForecast
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="integer")
      */
     private $date;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $min;
+    private $minimum;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $max;
+    private $maximum;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $day;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $night;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\forecast")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Forecast", inversedBy="dailyForecasts")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $forecastId;
+    private $forecast;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Weather", mappedBy="dailyForecast", orphanRemoval=true)
+     */
+    private $dayWeather;
+
+    public function __construct()
+    {
+        $this->dayWeather = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDate(): ?string
+    public function getDate(): ?int
     {
         return $this->date;
     }
 
-    public function setDate(string $date): self
+    public function setDate(int $date): self
     {
         $this->date = $date;
 
         return $this;
     }
 
-    public function getMin(): ?int
+    public function getMinimum(): ?int
     {
-        return $this->min;
+        return $this->minimum;
     }
 
-    public function setMin(int $min): self
+    public function setMinimum(int $minimum): self
     {
-        $this->min = $min;
+        $this->minimum = $minimum;
 
         return $this;
     }
 
-    public function getMax(): ?int
+    public function getMaximum(): ?int
     {
-        return $this->max;
+        return $this->maximum;
     }
 
-    public function setMax(int $max): self
+    public function setMaximum(int $maximum): self
     {
-        $this->max = $max;
+        $this->maximum = $maximum;
 
         return $this;
     }
 
-    public function getDay(): ?string
+    public function getForecast(): ?Forecast
     {
-        return $this->day;
+        return $this->forecast;
     }
 
-    public function setDay(?string $day): self
+    public function setForecast(?Forecast $forecast): self
     {
-        $this->day = $day;
+        $this->forecast = $forecast;
 
         return $this;
     }
 
-    public function getNight(): ?string
+    /**
+     * @return Collection|Weather[]
+     */
+    public function getDayWeather(): Collection
     {
-        return $this->night;
+        return $this->dayWeather;
     }
 
-    public function setNight(?string $night): self
+    public function addDayWeather(Weather $dayWeather): self
     {
-        $this->night = $night;
+        if (!$this->dayWeather->contains($dayWeather)) {
+            $this->dayWeather[] = $dayWeather;
+            $dayWeather->setDailyForecast($this);
+        }
 
         return $this;
     }
 
-    public function getForecastId(): ?forecast
+    public function removeDayWeather(Weather $dayWeather): self
     {
-        return $this->forecastId;
-    }
-
-    public function setForecastId(?forecast $forecastId): self
-    {
-        $this->forecastId = $forecastId;
+        if ($this->dayWeather->contains($dayWeather)) {
+            $this->dayWeather->removeElement($dayWeather);
+            // set the owning side to null (unless already changed)
+            if ($dayWeather->getDailyForecast() === $this) {
+                $dayWeather->setDailyForecast(null);
+            }
+        }
 
         return $this;
     }

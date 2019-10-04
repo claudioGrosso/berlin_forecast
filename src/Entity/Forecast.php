@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,51 +19,43 @@ class Forecast
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="integer")
      */
     private $date;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $end;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text")
      */
     private $text;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\city")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $cityId;
+    private $link;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\DailyForecast", mappedBy="forecast", orphanRemoval=true)
+     */
+    private $dailyForecasts;
+
+    public function __construct()
+    {
+        $this->dailyForecasts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDate(): ?string
+    public function getDate(): ?int
     {
         return $this->date;
     }
 
-    public function setDate(string $date): self
+    public function setDate(int $date): self
     {
         $this->date = $date;
-
-        return $this;
-    }
-
-    public function getEnd(): ?string
-    {
-        return $this->end;
-    }
-
-    public function setEnd(string $end): self
-    {
-        $this->end = $end;
 
         return $this;
     }
@@ -71,21 +65,52 @@ class Forecast
         return $this->text;
     }
 
-    public function setText(?string $text): self
+    public function setText(string $text): self
     {
         $this->text = $text;
 
         return $this;
     }
 
-    public function getCityId(): ?city
+    public function getLink(): ?string
     {
-        return $this->cityId;
+        return $this->link;
     }
 
-    public function setCityId(?city $cityId): self
+    public function setLink(string $link): self
     {
-        $this->cityId = $cityId;
+        $this->link = $link;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DailyForecast[]
+     */
+    public function getDailyForecasts(): Collection
+    {
+        return $this->dailyForecasts;
+    }
+
+    public function addDailyForecast(DailyForecast $dailyForecast): self
+    {
+        if (!$this->dailyForecasts->contains($dailyForecast)) {
+            $this->dailyForecasts[] = $dailyForecast;
+            $dailyForecast->setForecast($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDailyForecast(DailyForecast $dailyForecast): self
+    {
+        if ($this->dailyForecasts->contains($dailyForecast)) {
+            $this->dailyForecasts->removeElement($dailyForecast);
+            // set the owning side to null (unless already changed)
+            if ($dailyForecast->getForecast() === $this) {
+                $dailyForecast->setForecast(null);
+            }
+        }
 
         return $this;
     }

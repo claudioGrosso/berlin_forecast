@@ -40,8 +40,7 @@ class HomeController extends AbstractController
         $city->setLocationKey('178087');
 
         $forecast = new Forecast();
-        $forecast->setDate($data["Headline"]["EffectiveDate"]);
-        $forecast->setEnd($data["Headline"]["EndDate"]);
+        $forecast->setDate($data["Headline"]["EffectiveEpochDate"]);
         $forecast->setText($data["Headline"]["Text"]);
         $forecast->setCityId($city);
 
@@ -56,7 +55,7 @@ class HomeController extends AbstractController
         foreach($dailyForecast as $daily){
                         
             $day = new DailyForecast();
-            $day->setDate($daily["Date"]);
+            $day->setDate($daily["EpochDate"]);
             $day->setMin($daily["Temperature"]["Minimum"]["Value"]);
             $day->setMax($daily["Temperature"]["Maximum"]["Value"]);
             $day->setDay($daily["Day"]["IconPhrase"]);
@@ -66,7 +65,7 @@ class HomeController extends AbstractController
             $entityManager->persist($day);
             
             $weather = array(
-                'date' => $day->getDate(),
+                'date' => date("l d-M-Y",$day->getDate()),
                 'min' => $day->getMin(),
                 'max' => $day->getMax(),
                 'day' => $day->getDay(),
