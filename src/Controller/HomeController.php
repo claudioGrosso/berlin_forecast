@@ -21,11 +21,16 @@ class HomeController extends AbstractController
     public function index()
     {
        
-        $url = "http://dataservice.accuweather.com/forecasts/v1/daily/5day/178087?";
+        #
+        # Edit Here you secret Key
+        #
+        $apiKey = '';
 
+        $url = "http://dataservice.accuweather.com/forecasts/v1/daily/5day/178087?";
+        
 
         $parameters = [
-            'apikey' => 'Id6yp6M6v0WhuuYyrjfjdFGCWa7jBGCh',
+            'apikey' => $apiKey,
             'language' => 'en-us',
             'details' => false,
             'metric' => false
