@@ -20,7 +20,10 @@ class HomeController extends AbstractController
      */
     public function index()
     {
+       
         $url = "http://dataservice.accuweather.com/forecasts/v1/daily/5day/178087?";
+
+
         $parameters = [
             'apikey' => 'Id6yp6M6v0WhuuYyrjfjdFGCWa7jBGCh',
             'language' => 'en-us',
@@ -97,12 +100,12 @@ class HomeController extends AbstractController
             
         }         
 
-
-        
-        
         $entityManager->flush();
         
-        return $this->render('home/show.html.twig', ['forecast' => $forecast->getText(),'weathers' => $weathers]);
+        return $this->render('home/show.html.twig', [
+            'forecast' => $forecast->getText(),
+            'weathers' => $weathers
+        ]);
                 
     }
 }
