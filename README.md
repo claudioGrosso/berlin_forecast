@@ -1,4 +1,5 @@
 # Berlin forecast
+
 Symfony project to show next 5 day's forecast for Berlin ( Limited Trial )
 
 Data from [AccuWeatherAPIs](https://developer.accuweather.com/apis)
@@ -10,18 +11,19 @@ Database Schema(https://drive.google.com/file/d/1uYA1Ejsf28a8x6ROTfJv_gR_8pehPOF
 * DB MySQL
 
 ## How to run it
-commands for Linux bash:
 
-1. git clone *his_repository*
+Commands for Linux bash:
 
-  1. cd *repository_directory*
+1. **git clone** *this_repository*
 
-  1. composer install
+  1. **cd** *repository_directory*
+
+  1. **composer install**
 
 1. edit .env file for the DB connection
 
 1. edit HomeController and set $apiKey variable with *your_apiKey*
 
-1. symfony server:start
+1. **symfony server:start**
 
 
