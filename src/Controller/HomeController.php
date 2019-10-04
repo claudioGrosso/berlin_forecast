@@ -80,18 +80,7 @@ class HomeController extends AbstractController
         
         $entityManager->flush();
         
-        return $this->render('home/show.html.twig', ['weathers' => $weathers]);
+        return $this->render('home/show.html.twig', ['forecast' => $forecast->getText(),'weathers' => $weathers]);
                 
-    }
-
-    /**
-     * @Route("/show", name="show")
-     */
-    public function show(){
-
-
-
-        return $this->render('home/show.html.twig');
-
     }
 }
