@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20191003123454 extends AbstractMigration
+final class Version20191004124535 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,8 +22,7 @@ final class Version20191003123454 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE daily_forecast CHANGE date date VARCHAR(255) NOT NULL');
-        $this->addSql('ALTER TABLE forecast CHANGE date date VARCHAR(255) NOT NULL, CHANGE end end VARCHAR(255) NOT NULL');
+        $this->addSql('ALTER TABLE weather CHANGE type type VARCHAR(255) DEFAULT NULL, CHANGE intensity intensity VARCHAR(255) DEFAULT NULL');
     }
 
     public function down(Schema $schema) : void
@@ -31,7 +30,6 @@ final class Version20191003123454 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE daily_forecast CHANGE date date DATETIME NOT NULL');
-        $this->addSql('ALTER TABLE forecast CHANGE date date DATETIME NOT NULL, CHANGE end end DATETIME NOT NULL');
+        $this->addSql('ALTER TABLE weather CHANGE type type VARCHAR(255) NOT NULL COLLATE utf8mb4_unicode_ci, CHANGE intensity intensity VARCHAR(255) NOT NULL COLLATE utf8mb4_unicode_ci');
     }
 }

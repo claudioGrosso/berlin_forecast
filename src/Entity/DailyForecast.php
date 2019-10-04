@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,7 +19,7 @@ class DailyForecast
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="integer")
      */
     private $date;
 
@@ -32,32 +34,32 @@ class DailyForecast
     private $max;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $day;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $night;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\forecast")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Forecast", inversedBy="dailyForecasts")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $forecastId;
+    private $forecast;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Weather", mappedBy="dailyForecast", orphanRemoval=false)
+     */
+    private $weather;
+
+    public function __construct()
+    {
+        $this->weather = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDate(): ?string
+    public function getDate(): ?int
     {
         return $this->date;
     }
 
-    public function setDate(string $date): self
+    public function setDate(int $date): self
     {
         $this->date = $date;
 
@@ -88,38 +90,45 @@ class DailyForecast
         return $this;
     }
 
-    public function getDay(): ?string
+    public function getForecast(): ?Forecast
     {
-        return $this->day;
+        return $this->forecast;
     }
 
-    public function setDay(?string $day): self
+    public function setForecast(?Forecast $forecast): self
     {
-        $this->day = $day;
+        $this->forecast = $forecast;
 
         return $this;
     }
 
-    public function getNight(): ?string
+    /**
+     * @return Collection|Weather[]
+     */
+    public function getWeather(): Collection
     {
-        return $this->night;
+        return $this->weather;
     }
 
-    public function setNight(?string $night): self
+    public function addWeather(Weather $weather): self
     {
-        $this->night = $night;
+        if (!$this->weather->contains($weather)) {
+            $this->weather[] = $weather;
+            $weather->setDailyForecast($this);
+        }
 
         return $this;
     }
 
-    public function getForecastId(): ?forecast
+    public function removeWeather(Weather $weather): self
     {
-        return $this->forecastId;
-    }
-
-    public function setForecastId(?forecast $forecastId): self
-    {
-        $this->forecastId = $forecastId;
+        if ($this->weather->contains($weather)) {
+            $this->weather->removeElement($weather);
+            // set the owning side to null (unless already changed)
+            if ($weather->getDailyForecast() === $this) {
+                $weather->setDailyForecast(null);
+            }
+        }
 
         return $this;
     }
