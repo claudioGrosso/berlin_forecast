@@ -87,7 +87,9 @@ class HomeController extends AbstractController
                 'date' => date("l d-M-Y",$day->getDate()),
                 'min' => $day->getMin(),
                 'max' => $day->getMax(),
+                'day_precipitation' => $dayWeather->getPrecipitation(),
                 'day' => $dayWeather->getPhrase(),
+                'night_precipitation' => $nightWeather->getPrecipitation(),
                 'night' => $nightWeather->getPhrase()
             );
 

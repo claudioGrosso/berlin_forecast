@@ -27,10 +27,12 @@ tr:nth-child(even) {
 <table>
   <tr>
     <th>Date</th>
-    <th>Min</th>
-    <th>Max</th>
+    <th>Min °F</th>
+    <th>Max °F</th>
     <th>Day</th>
+    <th>Precipitation</th>
     <th>Night</th>
+    <th>Precipitation</th>
   </tr>
 {% for weather in weathers %}
   <tr>
@@ -38,7 +40,9 @@ tr:nth-child(even) {
     <td>{{ weather.min }}</td>
     <td>{{ weather.max }}</td>
     <td>{{ weather.day }}</td>
+    <td>{{ weather.day_precipitation }}</td>
     <td>{{ weather.night }}</td>
+    <td>{{ weather.night_precipitation }}</td>
   </tr>
   <tr>
 {% endfor %}
