@@ -4,7 +4,7 @@ Symfony project to show next 5 day's forecast for Berlin ( Limited Trial )
 
 Data from [AccuWeatherAPIs](https://developer.accuweather.com/apis)
 
-Database Schema(https://drive.google.com/file/d/1uYA1Ejsf28a8x6ROTfJv_gR_8pehPOFE/view?usp=sharing)
+Database Schema (https://drive.google.com/file/d/1uYA1Ejsf28a8x6ROTfJv_gR_8pehPOFE/view?usp=sharing)
 
 **Tech Stack**:
 * Symfony 4.3.4
