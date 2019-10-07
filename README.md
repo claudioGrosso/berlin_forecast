@@ -26,4 +26,6 @@ Commands for Linux bash:
 
 1. **symfony server:start**
 
+1. http://127.0.0.1:8000/home
+
 
