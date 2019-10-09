@@ -16,17 +16,14 @@ use Doctrine\ORM\EntityManagerInterface;
 class HomeController extends AbstractController
 {
     /**
-     * @Route("/home", name="home")
+     * @Route("/forecast/daily/{days}/{locationKey}", name="forecast_daily")
      */
-    public function index()
+    public function daily( $days, $locationKey)
     {
-       
-        #
-        # Edit Here you secret Key
-        #
-        $apiKey = '';
 
-        $url = "http://dataservice.accuweather.com/forecasts/v1/daily/5day/178087?";
+        $apiKey = $_ENV['API_KEY'];
+
+        $url = "http://dataservice.accuweather.com/forecasts/v1/daily/".$days."day/".$locationKey."?";
         
 
         $parameters = [
@@ -113,4 +110,32 @@ class HomeController extends AbstractController
         ]);
                 
     }
+
+    /**
+     * @Route("/forecast/hourly/{hours}/{locationKey}", name="forecast_hourly")
+     */
+    public function hourly($hours, $locationKey)
+    {
+        $apiKey = $_ENV['API_KEY'];
+        
+        $url = "http://dataservice.accuweather.com/forecasts/v1/hourly/".$hours."hour/".$locationKey."?";
+        
+
+        $parameters = [
+            'apikey' => $apiKey,
+            'language' => 'en-us',
+            'details' => false,
+            'metric' => false
+        ];
+
+        $query = http_build_query($parameters);
+
+        $client = HttpClient::create();
+        $response = $client->request('GET', $url.$query);        
+
+        return JsonResponse::fromJsonString($response->getContent());
+
+        
+    }
+
 }
